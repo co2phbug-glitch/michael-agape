@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michael, agapé</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #1a1410;
+            color: #e8ddd0;
+            font-family: 'Cormorant Garamond', serif;
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Entry Ritual - Full screen quote on first visit */
+        .entry-ritual {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #1a1410;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 1.5s ease, visibility 1.5s ease;
+        }
+
+        .entry-ritual.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .entry-ritual .ritual-content {
+            max-width: 700px;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .entry-ritual .ritual-content p {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: #d4a574;
+            line-height: 1.6;
+            letter-spacing: 0.03em;
+        }
+
+        .entry-ritual .ritual-content .ritual-line {
+            width: 60px;
+            height: 1px;
+            background: #8b6914;
+            margin: 2rem auto;
+        }
+
+        .entry-ritual .ritual-content .ritual-invite {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #8b7355;
+            margin-top: 2rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .entry-ritual .ritual-content .ritual-invite:hover {
+            color: #d4a574;
+        }
+
+        /* Subtle texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem 3rem;
+            background: linear-gradient(180deg, #2a1f15 0%, #1a1410 100%);
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3.2rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            color: #d4a574;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-style: italic;
+            font-size: 1.25rem;
+            color: #b8956a;
+            letter-spacing: 0.05em;
+        }
+
+        .manifesto {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .manifesto p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: #c9bba8;
+        }
+
+        .manifesto .quote {
+            font-style: italic;
+            font-size: 1.5rem;
+            color: #d4a574;
+            border-left: 2px solid #8b6914;
+            padding-left: 1.5rem;
+            text-align: left;
+            max-width: 640px;
+            margin: 2.5rem auto;
+            line-height: 1.5;
+        }
+
+        .bio {
+            max-width: 640px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #b8a99a;
+            position: relative;
+            z-index: 2;
+        }
+
+        .offerings {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .offering {
+            background: #231a12;
+            border: 1px solid #3d2e1e;
+            border-radius: 4px;
+            overflow: hidden;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .offering:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 50px rgba(212, 165, 116, 0.1);
+        }
+
+        .offering img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .offering:hover img {
+            transform: scale(1.03);
+        }
+
+        .offering-content {
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .offering-content p {
+            font-size: 1.15rem;
+            color: #c9bba8;
+            margin-top: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .offering-content .tag {
+            font-size: 0.95rem;
+            color: #8b6914;
+            font-style: italic;
+            margin-top: 0.75rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #5a4a3a;
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        footer p {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .entry-ritual .ritual-content p { font-size: 1.3rem; }
+            .offerings { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Entry Ritual -->
+    <div class="entry-ritual" id="entryRitual">
+        <div class="ritual-content">
+            <p>"Pleasure is not the enemy of wisdom,<br>pleasure is nature's most ancient language."</p>
+            <div class="ritual-line"></div>
+            <p style="font-size: 1.2rem; color: #8b7355;">True pleasure is not hedonism,<br>rather integrated radiance.</p>
+            <p class="ritual-invite" onclick="enterSite()">— Enter —</p>
+        </div>
+    </div>
+
+    <div class="hero">
+        <h1>Michael, agapé</h1>
+        <p class="subtitle">Author · Painter · Photographer</p>
+    </div>
+
+    <div class="manifesto">
+        <p>Liberating pleasure, sexuality, and ecstasy from generational and dogmatic shame; leveraging the sacred intelligence of the body and the earth.</p>
+
+        <div class="quote">
+            "When we gently put down our habitual tension,<br>the body returns to its inherent intelligence."
+        </div>
+    </div>
+
+    <div class="bio">
+        <p>Michael writes, paints, and photographs at the intersection of the sacred and the sensual. His shamanic vision began in the presence of the goddess Nike at the Louvre—an experience of direct revelation, not inherited doctrine. His work invites us to examine and release our inherited shame and fear.</p>
+    </div>
+
+    <div class="offerings">
+
+        <a href="https://www.amazon.com/dp/B0F6KBFJ8Y" target="_blank">
+            <div class="offering">
+                <img src="cupid-psyche-cover.jpg" alt="100 Orgasms an Hour">
+                <div class="offering-content">
+                    <p><strong>Michael's writing mentors you through raising the bar on your human goddess's pleasure.</strong></p>
+                    <p class="tag">18+ Sexual education, techniques and erotica</p>
+                </div>
+            </div>
+        </a>
+
+        <a href="https://youtube.com/shorts/kT3m1ltZP4Y?si=NyleaP8nsNBTKCjc" target="_blank">
+            <div class="offering">
+                <img src="gaia-mountain.jpg" alt="Gaia Invocation">
+                <div class="offering-content">
+                    <p>An invocation of the earth goddess Gaia, as an adoration of the divine feminine.</p>
+                </div>
+            </div>
+        </a>
+
+        <a href="#calendar-coming-soon">
+            <div class="offering">
+                <img src="gaia-reclining-landscape.jpg" alt="Gaia Calendar">
+                <div class="offering-content">
+                    <p><em>Gaia Calendar — Coming soon</em></p>
+                    <p class="tag">Nacmine, Drumheller — where Gaia and I collaborate</p>
+                </div>
+            </div>
+        </a>
+
+    </div>
+
+    <footer>
+        <p>NACMINE GAIA</p>
+    </footer>
+
+    <script>
+        function enterSite() {
+            document.getElementById('entryRitual').classList.add('hidden');
+            sessionStorage.setItem('ritualComplete', 'true');
+        }
+
+        // Skip ritual if already visited this session
+        if (sessionStorage.getItem('ritualComplete')) {
+            document.getElementById('entryRitual').classList.add('hidden');
+        }
+    </script>
+
+</body>
+</html>
